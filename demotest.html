@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>JavaScript HTTP Requests</title>
+	<script>
+		function get(){
+			var cli = new XMLHttpRequest();
+			var te=document.getElementById('value').value;
+	url='https://studentattportal.000webhostapp.com/insert.php?';
+	url+='value='+te;
+	cli.open('GET', url, true);
+	cli.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	cli.send();
+	
+	cli.onload = function() {
+		console.log(cli.response);
+	};
+		}
+	</script>
+</head>
+
+<body>
+	<input type="text" id="value">
+    <button type="button" onclick="get()">click me</button>
+</body>
+
+</html>

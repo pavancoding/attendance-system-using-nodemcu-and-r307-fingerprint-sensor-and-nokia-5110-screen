@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Attendence Portal</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+         <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Our Custom CSS -->
+
+        
+        <link rel="stylesheet" href="assets/css/main.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+        <script>
+            var url_string =window.location.href
+var url = new URL(url_string);
+var c = url.searchParams.get("regno");
+   console.log(c);   
+      function my(){
+          var fromdate=document.getElementById('startDate').value;
+          var todate=document.getElementById('endDate').value;
+          
+			var cli = new XMLHttpRequest();
+        console.log(fromdate);
+        console.log(todate);
+        url='https://studentattportal.000webhostapp.com/attendance.php?';
+	url+='fromdate='+fromdate+"&todate="+todate+"&regno="+c;
+	cli.open('GET', url, true);
+	cli.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	cli.send();
+	
+	cli.onload = function() {
+	    var response=cli.response;
+	    console.log(response);
+	    var string=response.split("<br>")
+		var size=string.length;
+		var mainarr = new Array(size);
+		console.log(size);
+		for(var i=0;i<size;i++)
+		mainarr[i]=new Array(9);
+		for(var i=0;i<size-1;i++){
+			var mainval=string[i].split(' ');
+			for(var j=0;j<9;j++)
+			if(mainval[j]=='0')
+			mainarr[i][j]="absent";
+			else if(mainval[j]=='1')
+			mainarr[i][j]="present";
+			else
+			mainarr[i][i]=mainval[j];
+			
+			
+		}
+		for(var i=0;i<size-1;i++){
+			for(var j=0;j<9;j++){
+				console.log(mainarr[i][j]);
+			}
+		}
+		var mytbl = document.getElementById("attendance");
+mytbl.getElementsByTagName("tbody")[0].innerHTML = mytbl.rows[0].innerHTML;
+for(var i=0;i<size-1;i++){
+   
+  var row = mytbl.insertRow(i+1);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell3 = row.insertCell(2);
+  var cell4 = row.insertCell(3);
+  var cell5 = row.insertCell(4);
+  var cell6 = row.insertCell(5);
+  var cell7 = row.insertCell(6);
+  var cell8 = row.insertCell(7);
+  var cell9 = row.insertCell(8);
+  cell1.innerHTML = mainarr[i][0];
+  cell2.innerHTML = mainarr[i][1];
+  cell3.innerHTML = mainarr[i][2];
+  cell4.innerHTML = mainarr[i][3];
+  cell5.innerHTML = mainarr[i][4];
+  cell6.innerHTML = mainarr[i][5];
+  cell7.innerHTML = mainarr[i][6];
+  cell8.innerHTML = mainarr[i][7];
+  cell9.innerHTML = mainarr[i][8];
+    
+}
+	};
+        
+          
+      }         
+              
+                
+        </script>
+		
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Attendence Portal</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li>
+                        <center>
+                            
+                            <img class="profile" src="user.png" width="100px" height="100px" />
+                            <h3 class="name">Student</h3>
+                            <h5 class="rollNumber" id='number'>191FA0XXXX</h5>
+                        </center>
+                    </li>
+                    <li class="active">
+                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">DashBoard</a>
+                    </li>
+                </ul>
+
+                <ul class="list-unstyled CTAs">
+                    <li><a href="index.html" class="download">Logout</a></li>
+                </ul>
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+                <div class="card" style="margin-bottom: 10px;">
+                    <table>
+                        <tr>
+                            <td style="width: 0;">
+                                <div class="navbar-header">
+                                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <h2 class="header">Student Attendence Portal</h2>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <center>
+                <div class="card" style="height: 50%; width: fit-content; margin-bottom: 10px;">
+                    <center style="margin:20px;">
+                        <h3 style="text-align: left; margin-top: 0px;">Start Date</h3>
+                        <input type="date" id="startDate" style="width: 250px;"/>
+                        <h3 style="text-align: left;">End Date</h3>
+                        <input type="date" id="endDate" style="width: 250px; margin-bottom: 20px;"/><br>
+                        <input type="submit" style="width: 200px; margin-bottom: 0px;" class="btn btn-primary" onclick="my()"/>
+                    </center>
+                </div>
+                </center>
+                <div class="card" style="width: 100%;padding-left:15px; padding-right: 15px;">
+                    <h2 style="margin-top: 10px;">Period Wise Attendence</h2>
+                    <div class="table-responsive">
+                    <table class="table table-bordered " id="attendance">
+                        <tr>
+                            <th>Date</th>
+                            <th>Period-1</th>
+                            <th>Period-2</th>
+                            <th>Period-3</th>
+                            <th>Period-4</th>
+                            <th>Period-5</th>
+                            <th>Period-6</th>
+                            <th>Period-7</th>
+                            <th>Period-8</th>
+                        </tr>
+                        
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- jQuery CDN -->
+         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+         <!-- Bootstrap Js CDN -->
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+         <script type="text/javascript">
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+                     $(this).toggleClass('active');
+                 });
+             });
+
+         </script>
+         <script>
+               var num=document.getElementById('number');
+                num.innerHTML =String(c);
+         </script>
+    </body>
+	
+	
+</html>
